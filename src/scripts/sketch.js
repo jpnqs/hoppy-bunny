@@ -3,19 +3,23 @@ var bunny = new Bunny();
 var platforms = new PlatformManager();
 var bunnyDir = '';
 
-window.addEventListener('deviceorientation', ev => {
+if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission().then(() => {
+        setupDeviceOrientationInput();
+    });
+} else {
+    setupDeviceOrientationInput();
+}
 
-    var alpha = Math.round(ev.alpha);
+function setupDeviceOrientationInput() {
+    window.addEventListener('deviceorientation', ev => {
 
-    // if (alpha > 10 && alpha < -10) {
+        var alpha = Math.round(ev.alpha);
+    
         bunny.sideForce = Math.floor(alpha / 10);
-
-    // } else {
-        // bunny.sideForce = 0;
-    // }
-
-
-}, true); 
+    
+    }, true); 
+}
 
 
 window.addEventListener('keydown', (ev) => {
